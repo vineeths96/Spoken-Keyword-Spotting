@@ -1,0 +1,69 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+
+\title{Spoken Keyword Spotting}
+\author{Vineeth S}
+\centering
+\date{May 2020}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{What is Spoken Keyword Spotting?}
+	Spoken Keyword Spotting is the task of identifying predefined words (called as keywords) from speech. Keyword spotting has wide range of applications from device wake-up (OK Google, Hey Siri etc) to hands-free control of devices.
+\end{frame}
+
+\begin{frame}{Dataset}
+	\begin{itemize}
+		\item For the of this project I have used Google Speech Commands Dataset (\url{https://arxiv.org/abs/1804.03209})
+		\item Speech Commands dataset has 65,000 one-second long utterances of 30 short words by thousands of different people
+		\item For the pilot implementation, I have used 10000 utterances
+		\item The dataset is designed build basic but useful voice interfaces for applications, with common words like “Yes”, “No”, digits, and directions etc
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Progress Made}
+	\begin{itemize}
+	    \item Developed an understanding how Keyword detection is implemented
+	    \item Developed a basic skeleton code in python for this purpose
+	    \item As of preparing this presentation, the model achieves an accuracy of 94\% on the test data on classification
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Model Specifications}
+   \begin{itemize}
+	    \item Input: Tensorflow Dataset Object with features and labels
+		\begin{itemize}
+			\item I have experimented with MFCC, and Log Filterbank Energies as of now
+			\item Labels belong to the 30 categories
+		\end{itemize}
+		\item Layer CNN	: To obtain the spatial dependencies
+	    \item Layer LSTM : To obtain the temporal dependencies
+	    \item Layer Attention Layer: To use attention mechanism
+	    \item Output: One of the 30 class labels
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Future plan of work}
+    \begin{itemize}
+        \item Try exploring with other input features
+		\item Experiment with different architectures
+		\item Extend it to continuous speech signal
+			\begin{itemize}
+				\item I have not tried providing an individual utterance feature and examine its computational footprint
+				\item If the footprint is small, we could simply slide a window over our speech signal and use the model to identify the keyword (if any)
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\huge{\centerline{The End}}
+\hspace{10em}
+\huge{\centerline{Questions? Suggestions?}}
+\end{frame}
+
+\end{document}
