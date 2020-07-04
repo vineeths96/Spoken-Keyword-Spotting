@@ -3,7 +3,6 @@ import tarfile
 import requests
 import pandas as pd
 from path import Path
-
 from src.parameters import *
 
 
@@ -101,7 +100,7 @@ def getDataDict(data_path='/input/speech_commands/'):
         'val': valData,
         'dev': devData,
         'test': testData
-        }
+    }
 
     return dataDict
 
