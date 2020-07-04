@@ -15,18 +15,18 @@
 
 \begin{frame}{Dataset}
 	\begin{itemize}
-		\item For the of this project I have used Google Speech Commands Dataset (\url{https://arxiv.org/abs/1804.03209})
-		\item Speech Commands dataset has 65,000 one-second long utterances of 30 short words by thousands of different people
-		\item For the pilot implementation, I have used 10000 utterances
-		\item The dataset is designed build basic but useful voice interfaces for applications, with common words like “Yes”, “No”, digits, and directions etc
+		\item<1-> For the of this project I have used Google Speech Commands Dataset (\url{https://arxiv.org/abs/1804.03209})
+		\item<2-> Speech Commands dataset has 65,000 one-second long utterances of 30 short words by thousands of different people
+		\item<3-> For the pilot implementation, I have used 10000 utterances
+		\item<4-> The dataset is designed build basic but useful voice interfaces for applications, with common words like “Yes”, “No”, digits, and directions etc
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Progress Made}
 	\begin{itemize}
-	    \item Developed an understanding how Keyword detection is implemented
-	    \item Developed a basic skeleton code in python for this purpose
-	    \item As of preparing this presentation, the model achieves an accuracy of 94\% on the test data on classification
+	    \item<1-> Developed an understanding how Keyword detection is implemented
+	    \item<2-> Developed a basic skeleton code in python for this purpose
+	    \item<3-> As of preparing this presentation, the model achieves an accuracy of 94\% on the test data on classification
 	\end{itemize}
 \end{frame}
 
@@ -48,9 +48,9 @@
 
 \begin{frame}{Future plan of work}
     \begin{itemize}
-        \item Try exploring with other input features
-		\item Experiment with different architectures
-		\item Extend it to continuous speech signal
+        \item<1-> Try exploring with other input features
+		\item<2-> Experiment with different architectures
+		\item<3-> Extend it to continuous speech signal
 			\begin{itemize}
 				\item I have not tried providing an individual utterance feature and examine its computational footprint
 				\item If the footprint is small, we could simply slide a window over our speech signal and use the model to identify the keyword (if any)

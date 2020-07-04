@@ -140,4 +140,7 @@ dmypy.json
 # pycache
 */__pycache__/
 
+# Input
+input/
+
 
