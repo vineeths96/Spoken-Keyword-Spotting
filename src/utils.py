@@ -5,7 +5,7 @@ from scipy.io import wavfile
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
-from sklearn.metrics import accuracy_score, recall_score
+from sklearn.metrics import accuracy_score, recall_score, matthews_corrcoef
 from sklearn.metrics import precision_score, f1_score, confusion_matrix
 from sklearn.metrics._plot.confusion_matrix import ConfusionMatrixDisplay
 from python_speech_features import logfbank
@@ -172,6 +172,7 @@ def OC_Statistics(y_pred, y_true, file_name):
     print("Precision: {:.4f}".format(precision_score(y_true, y_pred)))
     print("Recall: {:.4f}".format(recall_score(y_true, y_pred)))
     print("F1-score: {:.4f}".format(f1_score(y_true, y_pred)))
+    print("Matthews Correlation Coefficient: {:.4f}".format(matthews_corrcoef(y_true, y_pred)))
 
     plot_confusion_matrix(
         y_pred=y_pred,
