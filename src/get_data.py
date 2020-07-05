@@ -69,7 +69,7 @@ def getDataDict(data_path='/input/speech_commands/'):
 
     # Get the dev files
     dev_files = open(data_path + 'train/testing_list.txt').read().splitlines()
-    dev_files = [data_path + 'train/ ' + file_name for file_name in dev_files]
+    dev_files = [data_path + 'train/' + file_name for file_name in dev_files]
 
     # Find train_files as allFiles - {validation_files, dev_files}
     all_files = []

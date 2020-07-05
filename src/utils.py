@@ -2,7 +2,9 @@ import os
 import numpy as np
 import tensorflow as tf
 from scipy.io import wavfile
+import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from sklearn.metrics import accuracy_score, recall_score
 from sklearn.metrics import precision_score, f1_score, confusion_matrix
 from sklearn.metrics._plot.confusion_matrix import ConfusionMatrixDisplay
@@ -14,7 +16,7 @@ def getDataset(df,
                batch_size,
                cache_file=None,
                shuffle=True,
-               parse_param=(0.025, 0.01, 40),
+               parse_param=PARSE_PARAMS,
                scale=False):
     """
     Creates a Tensorflow Dataset containing filterbanks, labels
@@ -37,7 +39,7 @@ def getDataset(df,
                 _parse_fn,
                 inp=[filename, label, parse_param, scale],
                 Tout=[tf.float32, tf.int32]
-                )
+            )
         ),
         num_parallel_calls=os.cpu_count()
     )
@@ -70,8 +72,7 @@ def _loadfile(filename):
     return np.array(wave, dtype=np.float32)
 
 
-def _logMelFilterbank(wave,
-                      parse_param=(0.025, 0.01, 40)):
+def _logMelFilterbank(wave, parse_param=PARSE_PARAMS):
     """
     Computes the log Mel filterbanks
     :param wave: Audio as an array
@@ -86,7 +87,7 @@ def _logMelFilterbank(wave,
         winstep=float(parse_param[1]),
         highfreq=AUDIO_SR / 2,
         nfilt=int(parse_param[2])
-        )
+    )
 
     fbank = np.array(fbank, dtype=np.float32)
 
@@ -112,7 +113,7 @@ def _normalize(data):
 
 def _parse_fn(filename,
               label,
-              parse_param=(0.025, 0.01, 40),
+              parse_param=PARSE_PARAMS,
               scale=False):
     """
     Calculates filterbank energies for a given file
@@ -132,27 +133,38 @@ def _parse_fn(filename,
     return fbank, np.asarray(label, dtype=np.int32)
 
 
-def plot_confusion_matrix(y_pred, y_true):
+def plot_confusion_matrix(y_pred, y_true, labels, display_labels):
     """
     Plots the confusion matrix for given data
     :param y_pred: Predicted labels
     :param y_true: True labels
+    :param labels: Class labels integer
+    :param display_labels: Class labels to display
     :return: None
     """
 
-    cm = confusion_matrix(y_pred, y_true, labels=[0, 1])
-    ConfusionMatrixDisplay(confusion_matrix=cm,
-                           display_labels=['Other', 'Marvin']).plot()
+    cm = confusion_matrix(
+        y_pred=y_pred,
+        y_true=y_true,
+        labels=labels
+    )
 
-    plt.show()
+    ConfusionMatrixDisplay(
+        confusion_matrix=cm,
+        display_labels=display_labels
+    ).plot(cmap=plt.cm.Blues, values_format='d')
+
+    plt.grid(False)
+
+    return plt
 
 
-def OC_Statistics(y_pred,
-                  y_true):
+def OC_Statistics(y_pred, y_true, file_name):
     """
     Print performance statistics for One Class problem
     :param y_pred: Predicted labels
     :param y_true: True labels
+    :param file_name: Plot filename
     :return: None
     """
 
@@ -161,4 +173,50 @@ def OC_Statistics(y_pred,
     print("Recall: {:.4f}".format(recall_score(y_true, y_pred)))
     print("F1-score: {:.4f}".format(f1_score(y_true, y_pred)))
 
-    plot_confusion_matrix(y_pred, y_true)
+    plot_confusion_matrix(
+        y_pred=y_pred,
+        y_true=y_true,
+        labels=[-1, 1],
+        display_labels=['Other', 'Marvin'])
+
+    plt.savefig(f'../docs/results/{file_name}.png', dpi=300)
+    plt.show()
+
+
+def plot_history(history):
+    """
+    Plots and saves training history
+    :param history: Training history
+    :param model_name: Model name
+    :return: None
+    """
+
+    sns.set()
+
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    acc = history.history['sparse_categorical_accuracy']
+    val_acc = history.history['val_sparse_categorical_accuracy']
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8))
+
+    ax1.plot(loss, label='Training')
+    ax1.plot(val_loss, label='Validation')
+    ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax1.set_title('Model loss')
+    ax1.set_xlabel('Epoch')
+    ax1.set_ylabel('Loss')
+    ax1.legend()
+
+    ax2.plot(acc, label='Training')
+    ax2.plot(val_acc, label='Validation')
+    ax2.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax2.set_title('Accuracy')
+    ax2.set_xlabel('Epoch')
+    ax2.set_ylabel('Accuracy')
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.savefig('../docs/results/model_training.png', dpi=300)
+    fig.show()
