@@ -128,9 +128,9 @@ class StreamPrediction:
         data0 = np.frombuffer(in_data, dtype='int16')
 
         if np.abs(data0).mean() < self.silence_threshold:
-            print('-', sep='', end='', flush=True)
-        else:
             print('.', sep='', end='', flush=True)
+        else:
+            print('-', sep='', end='', flush=True)
 
         self.data = np.append(self.data, data0)
 
