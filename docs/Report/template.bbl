@@ -1,0 +1,165 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{6854370}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=34002606b4a6000b14a8974a306a2dae}{%
+           family={{Chen}},
+           familyi={C\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=8d0ddfdaa9de61a797376f9c06409245}{%
+           family={{Parada}},
+           familyi={P\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=9908a208ee1d2dd8c87fbd3fd7dcef43}{%
+           family={{Heigold}},
+           familyi={H\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \strng{fullhash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \strng{bibnamehash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \strng{authorbibnamehash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \strng{authornamehash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \strng{authorfullhash}{b35ffc864bf82aad7660f38e7aaeb20b}
+      \field{sortinit}{1}
+      \field{sortinithash}{50c6687d7fc80f50136d75228e3c59ba}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2014 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}
+      \field{title}{Small-footprint keyword spotting using deep neural networks}
+      \field{year}{2014}
+      \field{pages}{4087\bibrangedash 4091}
+      \range{pages}{5}
+    \endentry
+    \entry{Tabibian}{article}{}
+      \name{author}{1}{}{%
+        {{hash=0499dd10d8cbced4d1fac51e2f280979}{%
+           family={Tabibian},
+           familyi={T\bibinitperiod},
+           given={Shima},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{0499dd10d8cbced4d1fac51e2f280979}
+      \strng{fullhash}{0499dd10d8cbced4d1fac51e2f280979}
+      \strng{bibnamehash}{0499dd10d8cbced4d1fac51e2f280979}
+      \strng{authorbibnamehash}{0499dd10d8cbced4d1fac51e2f280979}
+      \strng{authornamehash}{0499dd10d8cbced4d1fac51e2f280979}
+      \strng{authorfullhash}{0499dd10d8cbced4d1fac51e2f280979}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Artificial Intelligence Review}
+      \field{title}{A survey on structured discriminative spoken keyword spotting}
+      \field{year}{2019}
+    \endentry
+    \entry{Sainath2015}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=28a3d000e5cd60656250014708db8ec1}{%
+           family={Sainath},
+           familyi={S\bibinitperiod},
+           given={Tara\bibnamedelima N.},
+           giveni={T\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=7fe2d48ce31c87a150449138bad607f0}{%
+           family={Parada},
+           familyi={P\bibinitperiod},
+           given={Carolina},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{703f896feb90812327ba5d68591e1889}
+      \strng{fullhash}{703f896feb90812327ba5d68591e1889}
+      \strng{bibnamehash}{703f896feb90812327ba5d68591e1889}
+      \strng{authorbibnamehash}{703f896feb90812327ba5d68591e1889}
+      \strng{authornamehash}{703f896feb90812327ba5d68591e1889}
+      \strng{authorfullhash}{703f896feb90812327ba5d68591e1889}
+      \field{sortinit}{3}
+      \field{sortinithash}{a37a8ef248a93c322189792c34fc68c9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{INTERSPEECH}
+      \field{title}{Convolutional neural networks for small-footprint keyword spotting}
+      \field{year}{2015}
+    \endentry
+    \entry{8639036}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=796158bbd7c2d4992f87abcd290154c8}{%
+           family={{Rownicka}},
+           familyi={R\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=c3f93602404e57705760ed54c4fbb5f1}{%
+           family={{Bell}},
+           familyi={B\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=2165eb3fd42d7c54fca97586b6122ea5}{%
+           family={{Renals}},
+           familyi={R\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \strng{fullhash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \strng{bibnamehash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \strng{authorbibnamehash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \strng{authornamehash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \strng{authorfullhash}{1915af387eab4c9dd47c0acfdee6c1c8}
+      \field{sortinit}{4}
+      \field{sortinithash}{e071e0bcb44634fab398d68ad04e69f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2018 IEEE Spoken Language Technology Workshop (SLT)}
+      \field{title}{Analyzing Deep CNN-Based Utterance Embeddings for Acoustic Model Adaptation}
+      \field{year}{2018}
+      \field{pages}{235\bibrangedash 241}
+      \range{pages}{7}
+    \endentry
+    \entry{gsc}{article}{}
+      \name{author}{1}{}{%
+        {{hash=cfc28a19549f0d8ff117cf79be90d213}{%
+           family={{Warden}},
+           familyi={W\bibinitperiod},
+           given={Pete},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{cfc28a19549f0d8ff117cf79be90d213}
+      \strng{fullhash}{cfc28a19549f0d8ff117cf79be90d213}
+      \strng{bibnamehash}{cfc28a19549f0d8ff117cf79be90d213}
+      \strng{authorbibnamehash}{cfc28a19549f0d8ff117cf79be90d213}
+      \strng{authornamehash}{cfc28a19549f0d8ff117cf79be90d213}
+      \strng{authorfullhash}{cfc28a19549f0d8ff117cf79be90d213}
+      \field{sortinit}{5}
+      \field{sortinithash}{5dd416adbafacc8226114bc0202d5fdd}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eid}{arXiv:1804.03209}
+      \field{journaltitle}{arXiv e-prints}
+      \field{title}{{Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition}}
+      \field{year}{2018}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

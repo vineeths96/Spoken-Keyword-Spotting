@@ -174,12 +174,14 @@ def OC_Statistics(y_pred, y_true, file_name):
     print("F1-score: {:.4f}".format(f1_score(y_true, y_pred)))
     print("Matthews Correlation Coefficient: {:.4f}".format(matthews_corrcoef(y_true, y_pred)))
 
+    sns.set(font_scale=1.50)
     plot_confusion_matrix(
         y_pred=y_pred,
         y_true=y_true,
         labels=[-1, 1],
         display_labels=['Other', 'Marvin'])
 
+    plt.tight_layout()
     plt.savefig(f'../docs/results/{file_name}.png', dpi=300)
     plt.show()
 
