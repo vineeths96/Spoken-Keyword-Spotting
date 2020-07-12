@@ -26,7 +26,7 @@ class StreamPrediction:
 
         # Recording parameters
         self.sr = 16000
-        self.chunk_duration = 0.5
+        self.chunk_duration = 0.75
         self.chunk_samples = int(self.sr * self.chunk_duration)
         self.window_duration = 1
         self.window_samples = int(self.sr * self.window_duration)
