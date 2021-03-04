@@ -1,4 +1,5 @@
 import os
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import tensorflow as tf
@@ -34,7 +35,7 @@ class StreamPrediction:
 
         # Data structures and buffers
         self.queue = Queue()
-        self.data = np.zeros(self.window_samples, dtype='int16')
+        self.data = np.zeros(self.window_samples, dtype="int16")
 
         # Plotting parameters
         self.change_bkg_frames = 2
@@ -49,20 +50,17 @@ class StreamPrediction:
         """
 
         # Load model structure
-        model = load_model(model_path + '/marvin_kws.h5')
+        model = load_model(model_path + "/marvin_kws.h5")
 
-        layer_name = 'features256'
-        self.feature_extractor = Model(
-            inputs=model.input,
-            outputs=model.get_layer(layer_name).output
-        )
+        layer_name = "features256"
+        self.feature_extractor = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
 
         # Load trained PCA object
-        with open(model_path + '/marvin_kws_pca.pickle', "rb") as file:
+        with open(model_path + "/marvin_kws_pca.pickle", "rb") as file:
             self.pca = pickle.load(file)
 
         # Load trained SVM
-        with open(model_path + '/marvin_kws_svm.pickle', "rb") as file:
+        with open(model_path + "/marvin_kws_svm.pickle", "rb") as file:
             self.marvin_svm = pickle.load(file)
 
         print("Loaded models from disk")
@@ -80,7 +78,7 @@ class StreamPrediction:
             input=True,
             frames_per_buffer=self.chunk_samples,
             input_device_index=6,
-            stream_callback=self.callback
+            stream_callback=self.callback,
         )
 
         stream.start_stream()
@@ -94,7 +92,7 @@ class StreamPrediction:
                 self.plotter(data, fbank, pred)
 
                 if pred == 1:
-                    print("Marvin!", sep='', end='', flush=True)
+                    print("Marvin!", sep="", end="", flush=True)
 
         except (KeyboardInterrupt, SystemExit):
             stream.stop_stream()
@@ -125,17 +123,17 @@ class StreamPrediction:
         :return:
         """
 
-        data0 = np.frombuffer(in_data, dtype='int16')
+        data0 = np.frombuffer(in_data, dtype="int16")
 
         if np.abs(data0).mean() < self.silence_threshold:
-            print('.', sep='', end='', flush=True)
+            print(".", sep="", end="", flush=True)
         else:
-            print('-', sep='', end='', flush=True)
+            print("-", sep="", end="", flush=True)
 
         self.data = np.append(self.data, data0)
 
         if len(self.data) > self.window_samples:
-            self.data = self.data[-self.window_samples:]
+            self.data = self.data[-self.window_samples :]
             self.queue.put(self.data)
 
         return in_data, pyaudio.paContinue
@@ -153,13 +151,13 @@ class StreamPrediction:
 
         # Wave
         plt.subplot(311)
-        plt.plot(data[-len(data) // 2:])
+        plt.plot(data[-len(data) // 2 :])
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.ylabel("Amplitude")
 
         # Filterbank energies
         plt.subplot(312)
-        plt.imshow(fbank[-fbank.shape[0] // 2:, :].T, aspect="auto")
+        plt.imshow(fbank[-fbank.shape[0] // 2 :, :].T, aspect="auto")
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().invert_yaxis()
         plt.ylim(0, 40)
@@ -173,30 +171,30 @@ class StreamPrediction:
             self.change_bkg = True
 
         if self.change_bkg and self.change_bkg_counter < self.change_bkg_frames:
-            ax.set_facecolor('lightgreen')
+            ax.set_facecolor("lightgreen")
 
             ax.text(
                 x=0.5,
                 y=0.5,
                 s="MARVIN!",
-                horizontalalignment='center',
-                verticalalignment='center',
+                horizontalalignment="center",
+                verticalalignment="center",
                 fontsize=30,
-                color='red',
-                fontweight='bold',
-                transform=ax.transAxes
+                color="red",
+                fontweight="bold",
+                transform=ax.transAxes,
             )
 
             self.change_bkg_counter += 1
         else:
-            ax.set_facecolor('salmon')
+            ax.set_facecolor("salmon")
             self.change_bkg = False
             self.change_bkg_counter = 0
 
         plt.tight_layout()
-        plt.pause(.01)
+        plt.pause(0.01)
 
 
 if __name__ == "__main__":
-    audio_stream = StreamPrediction('../models')
+    audio_stream = StreamPrediction("../models")
     audio_stream.start_stream()

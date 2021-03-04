@@ -14,11 +14,11 @@ from skopt import gp_minimize
 from skopt.plots import plot_convergence
 import matplotlib.pyplot as plt
 
-from src.parameters import *
-from src.utils import OC_Statistics
-from src.models import create_model
-from src.utils import getDataset, plot_history
-from src.get_data import downloadData, getDataDict, getDataframe
+from parameters import *
+from utils import OC_Statistics
+from models import create_model
+from utils import getDataset, plot_history
+from get_data import downloadData, getDataDict, getDataframe
 
 
 def model_train():
@@ -28,16 +28,16 @@ def model_train():
     """
 
     # Download data
-    downloadData(data_path='/input/speech_commands/')
+    downloadData(data_path="/input/speech_commands/")
 
     # Get data dictionary
-    dataDict = getDataDict(data_path='/input/speech_commands/')
+    dataDict = getDataDict(data_path="/input/speech_commands/")
 
     # Obtain dataframe for each dataset
-    trainDF = getDataframe(dataDict['train'])
-    valDF = getDataframe(dataDict['val'])
-    devDF = getDataframe(dataDict['dev'])
-    testDF = getDataframe(dataDict['test'])
+    trainDF = getDataframe(dataDict["train"])
+    valDF = getDataframe(dataDict["val"])
+    devDF = getDataframe(dataDict["dev"])
+    testDF = getDataframe(dataDict["test"])
 
     print("Dataset statistics")
     print("Train files: {}".format(trainDF.shape[0]))
@@ -46,42 +46,24 @@ def model_train():
     print("Test files: {}".format(testDF.shape[0]))
 
     # Use TF Data API for efficient data input
-    train_data, train_steps = getDataset(
-        df=trainDF,
-        batch_size=BATCH_SIZE,
-        cache_file='train_cache',
-        shuffle=True
-    )
+    train_data, train_steps = getDataset(df=trainDF, batch_size=BATCH_SIZE, cache_file="train_cache", shuffle=True)
 
-    val_data, val_steps = getDataset(
-        df=valDF,
-        batch_size=BATCH_SIZE,
-        cache_file='val_cache',
-        shuffle=False
-    )
+    val_data, val_steps = getDataset(df=valDF, batch_size=BATCH_SIZE, cache_file="val_cache", shuffle=False)
 
     model = create_model()
     model.summary()
 
     # Stop training if the validation accuracy doesn't improve
-    earlyStopping = EarlyStopping(
-        monitor='val_loss',
-        patience=PATIENCE,
-        verbose=1
-    )
+    earlyStopping = EarlyStopping(monitor="val_loss", patience=PATIENCE, verbose=1)
 
     # Reduce LR on validation loss plateau
-    reduceLR = ReduceLROnPlateau(
-        monitor='val_loss',
-        patience=PATIENCE,
-        verbose=1
-    )
+    reduceLR = ReduceLROnPlateau(monitor="val_loss", patience=PATIENCE, verbose=1)
 
     # Compile the model
     model.compile(
-        loss='sparse_categorical_crossentropy',
+        loss="sparse_categorical_crossentropy",
         optimizer=Adam(learning_rate=LEARNING_RATE),
-        metrics=["sparse_categorical_accuracy"]
+        metrics=["sparse_categorical_accuracy"],
     )
 
     # Train the model
@@ -91,16 +73,16 @@ def model_train():
         validation_data=val_data.repeat(),
         validation_steps=val_steps,
         epochs=EPOCHS,
-        callbacks=[earlyStopping, reduceLR]
+        callbacks=[earlyStopping, reduceLR],
     )
 
     # Save model
     print("Saving model")
-    model.save('../models/marvin_kws.h5')
+    model.save("../models/marvin_kws.h5")
 
     # Save history data
     print("Saving training history")
-    with open('../models/marvin_kws_history.pickle', "wb") as file:
+    with open("../models/marvin_kws_history.pickle", "wb") as file:
         pickle.dump(history.history, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     plot_history(history=history)
@@ -113,43 +95,35 @@ def marvin_kws_model():
     """
 
     # Download data
-    downloadData(data_path='/input/speech_commands/')
+    downloadData(data_path="/input/speech_commands/")
 
     # Get dictionary with files and labels
-    dataDict = getDataDict(data_path='/input/speech_commands/')
+    dataDict = getDataDict(data_path="/input/speech_commands/")
 
     # Obtain dataframe for each dataset
-    trainDF = getDataframe(dataDict['train'])
-    valDF = getDataframe(dataDict['val'])
+    trainDF = getDataframe(dataDict["train"])
+    valDF = getDataframe(dataDict["val"])
 
     # Obtain Marvin data from training data
     marvin_data, _ = getDataset(
-        df=trainDF.loc[trainDF['category'] == 'marvin', :],
+        df=trainDF.loc[trainDF["category"] == "marvin", :],
         batch_size=BATCH_SIZE,
-        cache_file='kws_marvin_cache',
-        shuffle=False
+        cache_file="kws_marvin_cache",
+        shuffle=False,
     )
 
     # Obtain Marvin - Other separated data from validation data
-    valDF['class'] = valDF.apply(lambda row: 1 if row['category'] == 'marvin' else -1, axis=1)
-    valDF.drop('category', axis=1)
-    val_true_labels = valDF['class'].tolist()
+    valDF["class"] = valDF.apply(lambda row: 1 if row["category"] == "marvin" else -1, axis=1)
+    valDF.drop("category", axis=1)
+    val_true_labels = valDF["class"].tolist()
 
-    val_data, _ = getDataset(
-        df=valDF,
-        batch_size=BATCH_SIZE,
-        cache_file='kws_val_cache',
-        shuffle=False
-    )
+    val_data, _ = getDataset(df=valDF, batch_size=BATCH_SIZE, cache_file="kws_val_cache", shuffle=False)
 
     # Load model and create feature extractor
-    model = load_model('../models/marvin_kws.h5')
+    model = load_model("../models/marvin_kws.h5")
 
-    layer_name = 'features256'
-    feature_extractor = Model(
-        inputs=model.input,
-        outputs=model.get_layer(layer_name).output
-    )
+    layer_name = "features256"
+    feature_extractor = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
 
     # Obtain the feature embeddings
     X_train = feature_extractor.predict(marvin_data, use_multiprocessing=True)
@@ -167,8 +141,8 @@ def marvin_kws_model():
     marvin_svm = svm.OneClassSVM()
 
     svm_space = [
-        Real(10 ** -5, 10 ** 0, "log-uniform", name='gamma'),
-        Real(10 ** -5, 10 ** 0, "log-uniform", name='nu')
+        Real(10 ** -5, 10 ** 0, "log-uniform", name="gamma"),
+        Real(10 ** -5, 10 ** 0, "log-uniform", name="nu"),
     ]
 
     @use_named_args(svm_space)
@@ -183,17 +157,13 @@ def marvin_kws_model():
         return -1 * score
 
     res_gp_svm = gp_minimize(
-        func=svm_objective,
-        dimensions=svm_space,
-        n_calls=100,
-        n_jobs=-1,
-        verbose=False,
-        random_state=1)
+        func=svm_objective, dimensions=svm_space, n_calls=100, n_jobs=-1, verbose=False, random_state=1
+    )
 
     print("Best F1 score={:.4f}".format(-res_gp_svm.fun))
 
     ax = plot_convergence(res_gp_svm)
-    plt.savefig('../docs/results/marvin_svm.png', dpi=300)
+    plt.savefig("../docs/results/marvin_svm.png", dpi=300)
     plt.show()
 
     # Instantiate a SVM with the optimal hyper-parameters
@@ -205,12 +175,12 @@ def marvin_kws_model():
 
     # Performance on training set
     val_pred_labels = marvin_kws.predict(X_val_transformed)
-    OC_Statistics(val_pred_labels, val_true_labels, 'marvin_cm_training')
+    OC_Statistics(val_pred_labels, val_true_labels, "marvin_cm_training")
 
     print("Saving PCA object")
-    with open('../models/marvin_kws_pca.pickle', "wb") as file:
+    with open("../models/marvin_kws_pca.pickle", "wb") as file:
         pickle.dump(pca, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("Saving Marvin SVM")
-    with open('../models/marvin_kws_svm.pickle', "wb") as file:
+    with open("../models/marvin_kws_svm.pickle", "wb") as file:
         pickle.dump(marvin_svm, file, protocol=pickle.HIGHEST_PROTOCOL)

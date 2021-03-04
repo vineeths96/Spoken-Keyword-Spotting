@@ -1,11 +1,10 @@
 import os
-from src.model_train import model_train, marvin_kws_model
-from src.model_test import marvin_model_test
+from model_train import model_train, marvin_kws_model
+from model_test import marvin_model_test
 
 
 def main():
-    trained = os.path.isfile('../models/marvin_kws_svm.pickle') \
-              and os.path.isfile('../models/marvin_kws_pca.pickle')
+    trained = os.path.isfile("../models/marvin_kws_svm.pickle") and os.path.isfile("../models/marvin_kws_pca.pickle")
 
     if not trained:
         print("Training model")
@@ -16,5 +15,5 @@ def main():
         marvin_model_test()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

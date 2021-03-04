@@ -9,15 +9,10 @@ from sklearn.metrics import accuracy_score, recall_score, matthews_corrcoef
 from sklearn.metrics import precision_score, f1_score, confusion_matrix
 from sklearn.metrics._plot.confusion_matrix import ConfusionMatrixDisplay
 from python_speech_features import logfbank
-from src.parameters import *
+from parameters import *
 
 
-def getDataset(df,
-               batch_size,
-               cache_file=None,
-               shuffle=True,
-               parse_param=PARSE_PARAMS,
-               scale=False):
+def getDataset(df, batch_size, cache_file=None, shuffle=True, parse_param=PARSE_PARAMS, scale=False):
     """
     Creates a Tensorflow Dataset containing filterbanks, labels
     :param df: Dataframe with filenames and labels
@@ -29,23 +24,17 @@ def getDataset(df,
     :return: TF Dataset, Steps per epoch
     """
 
-    data = tf.data.Dataset.from_tensor_slices(
-        (df['files'].tolist(), df['labels'].tolist())
-    )
+    data = tf.data.Dataset.from_tensor_slices((df["files"].tolist(), df["labels"].tolist()))
 
     data = data.map(
         lambda filename, label: tuple(
-            tf.py_function(
-                _parse_fn,
-                inp=[filename, label, parse_param, scale],
-                Tout=[tf.float32, tf.int32]
-            )
+            tf.py_function(_parse_fn, inp=[filename, label, parse_param, scale], Tout=[tf.float32, tf.int32])
         ),
-        num_parallel_calls=os.cpu_count()
+        num_parallel_calls=os.cpu_count(),
     )
 
     if cache_file:
-        data = data.cache('../input/' + cache_file)
+        data = data.cache("../input/" + cache_file)
 
     if shuffle:
         data = data.shuffle(buffer_size=df.shape[0])
@@ -86,7 +75,7 @@ def _logMelFilterbank(wave, parse_param=PARSE_PARAMS):
         winlen=float(parse_param[0]),
         winstep=float(parse_param[1]),
         highfreq=AUDIO_SR / 2,
-        nfilt=int(parse_param[2])
+        nfilt=int(parse_param[2]),
     )
 
     fbank = np.array(fbank, dtype=np.float32)
@@ -111,10 +100,7 @@ def _normalize(data):
     return (data - mean) / sd
 
 
-def _parse_fn(filename,
-              label,
-              parse_param=PARSE_PARAMS,
-              scale=False):
+def _parse_fn(filename, label, parse_param=PARSE_PARAMS, scale=False):
     """
     Calculates filterbank energies for a given file
     :param filename: File name
@@ -143,16 +129,11 @@ def plot_confusion_matrix(y_pred, y_true, labels, display_labels):
     :return: None
     """
 
-    cm = confusion_matrix(
-        y_pred=y_pred,
-        y_true=y_true,
-        labels=labels
-    )
+    cm = confusion_matrix(y_pred=y_pred, y_true=y_true, labels=labels)
 
-    ConfusionMatrixDisplay(
-        confusion_matrix=cm,
-        display_labels=display_labels
-    ).plot(cmap=plt.cm.Blues, values_format='d')
+    ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=display_labels).plot(
+        cmap=plt.cm.Blues, values_format="d"
+    )
 
     plt.grid(False)
 
@@ -175,14 +156,10 @@ def OC_Statistics(y_pred, y_true, file_name):
     print("Matthews Correlation Coefficient: {:.4f}".format(matthews_corrcoef(y_true, y_pred)))
 
     sns.set(font_scale=1.50)
-    plot_confusion_matrix(
-        y_pred=y_pred,
-        y_true=y_true,
-        labels=[-1, 1],
-        display_labels=['Other', 'Marvin'])
+    plot_confusion_matrix(y_pred=y_pred, y_true=y_true, labels=[-1, 1], display_labels=["Other", "Marvin"])
 
     plt.tight_layout()
-    plt.savefig(f'../docs/results/{file_name}.png', dpi=300)
+    plt.savefig(f"../docs/results/{file_name}.png", dpi=300)
     plt.show()
 
 
@@ -196,30 +173,30 @@ def plot_history(history):
 
     sns.set()
 
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
+    loss = history.history["loss"]
+    val_loss = history.history["val_loss"]
 
-    acc = history.history['sparse_categorical_accuracy']
-    val_acc = history.history['val_sparse_categorical_accuracy']
+    acc = history.history["sparse_categorical_accuracy"]
+    val_acc = history.history["val_sparse_categorical_accuracy"]
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8))
 
-    ax1.plot(loss, label='Training')
-    ax1.plot(val_loss, label='Validation')
+    ax1.plot(loss, label="Training")
+    ax1.plot(val_loss, label="Validation")
     ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax1.set_title('Model loss')
-    ax1.set_xlabel('Epoch')
-    ax1.set_ylabel('Loss')
+    ax1.set_title("Model loss")
+    ax1.set_xlabel("Epoch")
+    ax1.set_ylabel("Loss")
     ax1.legend()
 
-    ax2.plot(acc, label='Training')
-    ax2.plot(val_acc, label='Validation')
+    ax2.plot(acc, label="Training")
+    ax2.plot(val_acc, label="Validation")
     ax2.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax2.set_title('Accuracy')
-    ax2.set_xlabel('Epoch')
-    ax2.set_ylabel('Accuracy')
+    ax2.set_title("Accuracy")
+    ax2.set_xlabel("Epoch")
+    ax2.set_ylabel("Accuracy")
     ax2.legend()
 
     plt.tight_layout()
-    plt.savefig('../docs/results/model_training.png', dpi=300)
+    plt.savefig("../docs/results/model_training.png", dpi=300)
     fig.show()

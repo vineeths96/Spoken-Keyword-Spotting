@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Reshape, BatchNormalization, Dropout
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, ReLU
-from src.parameters import *
+from parameters import *
 
 
 def create_model():
@@ -19,7 +19,7 @@ def create_model():
 
     for num_filters in filters:
         # Convolutional layers
-        model.add(Conv2D(num_filters, kernel_size=KERNEL_SIZE, padding='same'))
+        model.add(Conv2D(num_filters, kernel_size=KERNEL_SIZE, padding="same"))
         model.add(BatchNormalization())
         model.add(ReLU())
 
@@ -29,15 +29,15 @@ def create_model():
 
     # Classification layers
     model.add(Flatten())
-    model.add(Dense(DENSE_1, name='features512'))
+    model.add(Dense(DENSE_1, name="features512"))
     model.add(BatchNormalization())
     model.add(ReLU())
     model.add(Dropout(DROPOUT))
-    model.add(Dense(DENSE_2, name='features256'))
+    model.add(Dense(DENSE_2, name="features256"))
     model.add(BatchNormalization())
     model.add(ReLU())
     model.add(Dropout(DROPOUT))
-    model.add(Dense(NUM_CLASSES, activation='softmax'))
+    model.add(Dense(NUM_CLASSES, activation="softmax"))
 
     model.summary()
 
